@@ -35,4 +35,9 @@
   to {
     transform: rotate(360deg);
   }
+}  
+
+.Button {
+  width: 15%;
+  justify-content: center;
 }
