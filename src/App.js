@@ -1,41 +1,48 @@
 import React, { useState, useCallback, useEffect } from "react";
 
-import Pokemon from "./components/pokemon";
+import Pokemon from "./components/Pokemon";
 
 import "./App.css";
 
 function App() {
   const [newPokemon, setNewPokemon] = useState(1);
-  const [namePokemon, setNamePokemon] = useState("");
-  const [sprites, setSprites] = useState("");
+  const [pokemonData, setPokemonData] = useState([]);
 
-  const nextPokemon = useCallback(() => {
+  const nextPokemon = () => {
     setNewPokemon(newPokemon + 1);
-  }, [newPokemon]);
+  };
 
   const previousPokemon = () => {
     setNewPokemon(newPokemon - 1);
   };
 
-  useEffect(() => {
-    async function fetchPokemon() {
+  const fetchPokemonHandler = useCallback(async () => {
+    try {
       const response = await fetch(
         `https://pokeapi.co/api/v2/pokemon/${newPokemon}`
       );
-      const pokemon = await response.json();
-      console.log(pokemon);
-      setNamePokemon(pokemon.name);
-      setSprites(pokemon.sprites.front_default);
-      return pokemon;
+
+      const data = await response.json();
+      console.log(data);
+
+      const loadedPokemon = [];
+
+      loadedPokemon.push(data.name)
+      loadedPokemon.push(data.sprites.front_default);
+      
+      setPokemonData(loadedPokemon);
+    } catch (error) {
+      console.log(error);
     }
-    fetchPokemon();
   }, [newPokemon]);
 
-
+  useEffect(() => {
+    fetchPokemonHandler();
+  }, [fetchPokemonHandler]);
 
   return (
     <div className="App">
-      <Pokemon name={namePokemon} image={sprites} />
+      <Pokemon name={pokemonData[0]} image={pokemonData[1]}/>
       <div className="Buttons">
         <button className="Button" onClick={previousPokemon}>
           Back
