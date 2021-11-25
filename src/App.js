@@ -6,7 +6,8 @@ import "./App.css";
 
 function App() {
   const [newPokemon, setNewPokemon] = useState(1);
-  const [pokemonData, setPokemonData] = useState([]);
+  const [pokemonName, setPokemonName] = useState([]);
+  const [pokemonSprite, setPokemonSprite] = useState([]);
 
   const nextPokemon = () => {
     setNewPokemon(newPokemon + 1);
@@ -25,12 +26,10 @@ function App() {
       const data = await response.json();
       console.log(data);
 
-      const loadedPokemon = [];
-
-      loadedPokemon.push(data.name)
-      loadedPokemon.push(data.sprites.front_default);
-      
-      setPokemonData(loadedPokemon);
+      const name = data.name
+      const sprite = data.sprites.front_default
+      setPokemonName(name);
+      setPokemonSprite(sprite);
     } catch (error) {
       console.log(error);
     }
@@ -42,7 +41,7 @@ function App() {
 
   return (
     <div className="App">
-      <Pokemon name={pokemonData[0]} image={pokemonData[1]}/>
+      <Pokemon name={pokemonName} image={pokemonSprite}/>
       <div className="Buttons">
         <button className="Button" onClick={previousPokemon}>
           Back
